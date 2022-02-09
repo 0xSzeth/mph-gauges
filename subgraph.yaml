@@ -1,0 +1,41 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: GaugeController
+    network: mainnet
+    source:
+      address: "0x3669C421b77340B2979d1A00a792CC2ee0FcE737"
+      abi: GaugeController
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CommitOwnership
+        - ApplyOwnership
+        - AddType
+        - NewTypeWeight
+        - NewGaugeWeight
+        - VoteForGauge
+        - NewGauge
+      abis:
+        - name: GaugeController
+          file: ./abis/GaugeController.json
+      eventHandlers:
+        - event: CommitOwnership(address)
+          handler: handleCommitOwnership
+        - event: ApplyOwnership(address)
+          handler: handleApplyOwnership
+        - event: AddType(string,int128)
+          handler: handleAddType
+        - event: NewTypeWeight(int128,uint256,uint256,uint256)
+          handler: handleNewTypeWeight
+        - event: NewGaugeWeight(address,uint256,uint256,uint256)
+          handler: handleNewGaugeWeight
+        - event: VoteForGauge(uint256,address,address,uint256)
+          handler: handleVoteForGauge
+        - event: NewGauge(address,int128,uint256)
+          handler: handleNewGauge
+      file: ./src/mapping.ts
