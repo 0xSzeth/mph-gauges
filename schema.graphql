@@ -2,3 +2,18 @@ type Gauge @entity {
   id: ID!
   address: String!
 }
+
+type User @entity {
+  id: ID!
+  address: String!
+  voteWeightUsed: BigInt!
+  votes: [Vote!]!
+}
+
+type Vote @entity {
+  id: ID!
+  user: User!
+  gauge: Gauge!
+  weight: BigInt!
+  time: BigInt!
+}
