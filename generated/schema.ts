@@ -18,6 +18,9 @@ export class Gauge extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("address", Value.fromString(""));
+    this.set("lastVote", Value.fromBigInt(BigInt.zero()));
+    this.set("currentWeight", Value.fromBigInt(BigInt.zero()));
+    this.set("futureWeight", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -53,6 +56,107 @@ export class Gauge extends Entity {
 
   set address(value: string) {
     this.set("address", Value.fromString(value));
+  }
+
+  get lastVote(): BigInt {
+    let value = this.get("lastVote");
+    return value!.toBigInt();
+  }
+
+  set lastVote(value: BigInt) {
+    this.set("lastVote", Value.fromBigInt(value));
+  }
+
+  get currentWeight(): BigInt {
+    let value = this.get("currentWeight");
+    return value!.toBigInt();
+  }
+
+  set currentWeight(value: BigInt) {
+    this.set("currentWeight", Value.fromBigInt(value));
+  }
+
+  get futureWeight(): BigInt {
+    let value = this.get("futureWeight");
+    return value!.toBigInt();
+  }
+
+  set futureWeight(value: BigInt) {
+    this.set("futureWeight", Value.fromBigInt(value));
+  }
+}
+
+export class GaugeInfo extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("numGauges", Value.fromI32(0));
+    this.set("checkpoint", Value.fromBigInt(BigInt.zero()));
+    this.set("currentTotalWeight", Value.fromBigInt(BigInt.zero()));
+    this.set("futureTotalWeight", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save GaugeInfo entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save GaugeInfo entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("GaugeInfo", id.toString(), this);
+    }
+  }
+
+  static load(id: string): GaugeInfo | null {
+    return changetype<GaugeInfo | null>(store.get("GaugeInfo", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get numGauges(): i32 {
+    let value = this.get("numGauges");
+    return value!.toI32();
+  }
+
+  set numGauges(value: i32) {
+    this.set("numGauges", Value.fromI32(value));
+  }
+
+  get checkpoint(): BigInt {
+    let value = this.get("checkpoint");
+    return value!.toBigInt();
+  }
+
+  set checkpoint(value: BigInt) {
+    this.set("checkpoint", Value.fromBigInt(value));
+  }
+
+  get currentTotalWeight(): BigInt {
+    let value = this.get("currentTotalWeight");
+    return value!.toBigInt();
+  }
+
+  set currentTotalWeight(value: BigInt) {
+    this.set("currentTotalWeight", Value.fromBigInt(value));
+  }
+
+  get futureTotalWeight(): BigInt {
+    let value = this.get("futureTotalWeight");
+    return value!.toBigInt();
+  }
+
+  set futureTotalWeight(value: BigInt) {
+    this.set("futureTotalWeight", Value.fromBigInt(value));
   }
 }
 

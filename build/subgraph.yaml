@@ -39,4 +39,6 @@ dataSources:
           handler: handleVoteForGauge
         - event: NewGauge(address,int128,uint256)
           handler: handleNewGauge
+      blockHandlers:
+        - handler: handleBlock
       file: GaugeController/GaugeController.wasm

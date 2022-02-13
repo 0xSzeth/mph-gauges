@@ -1,6 +1,17 @@
 type Gauge @entity {
   id: ID!
   address: String!
+  lastVote: BigInt!
+  currentWeight: BigInt!
+  futureWeight: BigInt!
+}
+
+type GaugeInfo @entity {
+  id: ID!
+  numGauges: Int!
+  checkpoint: BigInt!
+  currentTotalWeight: BigInt!
+  futureTotalWeight: BigInt!
 }
 
 type User @entity {
