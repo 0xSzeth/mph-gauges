@@ -6,7 +6,6 @@ import {
   Value,
   ValueKind,
   store,
-  Address,
   Bytes,
   BigInt,
   BigDecimal
@@ -17,10 +16,7 @@ export class Gauge extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("address", Value.fromString(""));
-    this.set("lastVote", Value.fromBigInt(BigInt.zero()));
-    this.set("currentWeight", Value.fromBigInt(BigInt.zero()));
-    this.set("futureWeight", Value.fromBigInt(BigInt.zero()));
+    this.set("address", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -49,251 +45,12 @@ export class Gauge extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get address(): string {
+  get address(): Bytes {
     let value = this.get("address");
-    return value!.toString();
+    return value!.toBytes();
   }
 
-  set address(value: string) {
-    this.set("address", Value.fromString(value));
-  }
-
-  get lastVote(): BigInt {
-    let value = this.get("lastVote");
-    return value!.toBigInt();
-  }
-
-  set lastVote(value: BigInt) {
-    this.set("lastVote", Value.fromBigInt(value));
-  }
-
-  get currentWeight(): BigInt {
-    let value = this.get("currentWeight");
-    return value!.toBigInt();
-  }
-
-  set currentWeight(value: BigInt) {
-    this.set("currentWeight", Value.fromBigInt(value));
-  }
-
-  get futureWeight(): BigInt {
-    let value = this.get("futureWeight");
-    return value!.toBigInt();
-  }
-
-  set futureWeight(value: BigInt) {
-    this.set("futureWeight", Value.fromBigInt(value));
-  }
-}
-
-export class GaugeInfo extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("numGauges", Value.fromI32(0));
-    this.set("checkpoint", Value.fromBigInt(BigInt.zero()));
-    this.set("currentTotalWeight", Value.fromBigInt(BigInt.zero()));
-    this.set("futureTotalWeight", Value.fromBigInt(BigInt.zero()));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save GaugeInfo entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save GaugeInfo entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("GaugeInfo", id.toString(), this);
-    }
-  }
-
-  static load(id: string): GaugeInfo | null {
-    return changetype<GaugeInfo | null>(store.get("GaugeInfo", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get numGauges(): i32 {
-    let value = this.get("numGauges");
-    return value!.toI32();
-  }
-
-  set numGauges(value: i32) {
-    this.set("numGauges", Value.fromI32(value));
-  }
-
-  get checkpoint(): BigInt {
-    let value = this.get("checkpoint");
-    return value!.toBigInt();
-  }
-
-  set checkpoint(value: BigInt) {
-    this.set("checkpoint", Value.fromBigInt(value));
-  }
-
-  get currentTotalWeight(): BigInt {
-    let value = this.get("currentTotalWeight");
-    return value!.toBigInt();
-  }
-
-  set currentTotalWeight(value: BigInt) {
-    this.set("currentTotalWeight", Value.fromBigInt(value));
-  }
-
-  get futureTotalWeight(): BigInt {
-    let value = this.get("futureTotalWeight");
-    return value!.toBigInt();
-  }
-
-  set futureTotalWeight(value: BigInt) {
-    this.set("futureTotalWeight", Value.fromBigInt(value));
-  }
-}
-
-export class User extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("address", Value.fromString(""));
-    this.set("voteWeightUsed", Value.fromBigInt(BigInt.zero()));
-    this.set("votes", Value.fromStringArray(new Array(0)));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save User entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save User entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("User", id.toString(), this);
-    }
-  }
-
-  static load(id: string): User | null {
-    return changetype<User | null>(store.get("User", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get address(): string {
-    let value = this.get("address");
-    return value!.toString();
-  }
-
-  set address(value: string) {
-    this.set("address", Value.fromString(value));
-  }
-
-  get voteWeightUsed(): BigInt {
-    let value = this.get("voteWeightUsed");
-    return value!.toBigInt();
-  }
-
-  set voteWeightUsed(value: BigInt) {
-    this.set("voteWeightUsed", Value.fromBigInt(value));
-  }
-
-  get votes(): Array<string> {
-    let value = this.get("votes");
-    return value!.toStringArray();
-  }
-
-  set votes(value: Array<string>) {
-    this.set("votes", Value.fromStringArray(value));
-  }
-}
-
-export class Vote extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("user", Value.fromString(""));
-    this.set("gauge", Value.fromString(""));
-    this.set("weight", Value.fromBigInt(BigInt.zero()));
-    this.set("time", Value.fromBigInt(BigInt.zero()));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save Vote entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save Vote entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("Vote", id.toString(), this);
-    }
-  }
-
-  static load(id: string): Vote | null {
-    return changetype<Vote | null>(store.get("Vote", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get user(): string {
-    let value = this.get("user");
-    return value!.toString();
-  }
-
-  set user(value: string) {
-    this.set("user", Value.fromString(value));
-  }
-
-  get gauge(): string {
-    let value = this.get("gauge");
-    return value!.toString();
-  }
-
-  set gauge(value: string) {
-    this.set("gauge", Value.fromString(value));
-  }
-
-  get weight(): BigInt {
-    let value = this.get("weight");
-    return value!.toBigInt();
-  }
-
-  set weight(value: BigInt) {
-    this.set("weight", Value.fromBigInt(value));
-  }
-
-  get time(): BigInt {
-    let value = this.get("time");
-    return value!.toBigInt();
-  }
-
-  set time(value: BigInt) {
-    this.set("time", Value.fromBigInt(value));
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
   }
 }

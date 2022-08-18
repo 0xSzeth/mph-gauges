@@ -6,39 +6,19 @@ dataSources:
     name: GaugeController
     network: mainnet
     source:
-      address: "0x3669C421b77340B2979d1A00a792CC2ee0FcE737"
+      address: "0x16dff045De4421E836A42FC2e98d4Ec9015bd470"
       abi: GaugeController
-      startBlock: 14052749
+      startBlock: 15253228
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - CommitOwnership
-        - ApplyOwnership
-        - AddType
-        - NewTypeWeight
-        - NewGaugeWeight
-        - VoteForGauge
-        - NewGauge
+        - Gauge
       abis:
         - name: GaugeController
           file: ./abis/GaugeController.json
       eventHandlers:
-        - event: CommitOwnership(address)
-          handler: handleCommitOwnership
-        - event: ApplyOwnership(address)
-          handler: handleApplyOwnership
-        - event: AddType(string,int128)
-          handler: handleAddType
-        - event: NewTypeWeight(int128,uint256,uint256,uint256)
-          handler: handleNewTypeWeight
-        - event: NewGaugeWeight(address,uint256,uint256,uint256)
-          handler: handleNewGaugeWeight
-        - event: VoteForGauge(uint256,address,address,uint256)
-          handler: handleVoteForGauge
         - event: NewGauge(address,int128,uint256)
           handler: handleNewGauge
-      blockHandlers:
-        - handler: handleBlock
       file: ./src/GaugeController.ts
